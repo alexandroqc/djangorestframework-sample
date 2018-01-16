@@ -3,8 +3,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from snippets import views
 
 urlpatterns = [
-    path('snippets/', views.snippet_list),
-    re_path('snippets/(?P<pk>[0-9]+)/', views.snippet_detail),
+    path('snippets/', views.SnippetList.as_view()),
+    re_path('snippets/(?P<pk>[0-9]+)/', views.SnippetDetail.as_view()),
 ]
 
 ## Format suffixes: http://www.django-rest-framework.org/api-guide/format-suffixes/
