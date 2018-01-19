@@ -1,24 +1,46 @@
 from django.urls import path, re_path, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from snippets import views
+from snippets.views import SnippetViewSet, UserViewSet, api_root
+from rest_framework import renderers
+
+snippet_list = SnippetViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+snippet_detail = SnippetViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
+snippet_highlight = SnippetViewSet.as_view({
+    'get': 'highlight'
+}, renderer_classes=[renderers.StaticHTMLRenderer])
+user_list = UserViewSet.as_view({
+    'get': 'list'
+})
+user_detail = UserViewSet.as_view({
+    'get': 'retrieve'
+})
 
 urlpatterns = [
     path('',
-        views.api_root),
+        api_root),
     path('snippets/',
-        views.SnippetList.as_view(),
+        snippet_list,
         name='snippet-list'),
     re_path('snippets/(?P<pk>[0-9]+)/',
-        views.SnippetDetail.as_view(),
+        snippet_detail,
         name='snippet-detail'),
     re_path('snippets/(?P<pk>[0-9]+)/highlight/',
-        views.SnippetHighlight.as_view(),
+        snippet_highlight,
         name='snippet-highlight'),
     path('users/',
-        views.UserList.as_view(),
+        user_list,
         name='user-list'),
     re_path('users/(?P<pk>[0-9]+)/',
-        views.UserDetail.as_view(),
+        user_detail,
         name='user-detail'),
     path('api-auth/', include('rest_framework.urls')),
 ]
